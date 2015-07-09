@@ -1,0 +1,14 @@
+ <widget id="com.example.hello" version="0.0.1">
+        <name>The New Test App</name>
+        <description>
+        Learning Phonegap can be fun
+        </description>
+        <author email="fazwanray@gmail.com" href="http://phonegap.com">
+        Fazwan Zack
+        </author>
+        <content src="index.html" />
+        <access origin="*" />
+		
+		<icon src="images/images.jpg" />
+		<splash src="images/add.jpg"/>
+    </widget>
