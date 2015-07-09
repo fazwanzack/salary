@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+	body
+	{
+		background:black;
+		
+	}
+	@font-face
+	{
+		font-family:afont;
+		src:url("Kaushan.otf");
+	}
+	#title
+	{
+		color:white;
+		font-family:afont;
+	}
+	#form1
+	{
+		height:150px;
+		width:175px;
+		position:relative;
+		background:yellow;
+		padding-top:20px;
+		padding-left:20px;
+		word-spacing:5px;
+		border: 2px solid;
+		border-style: dotted;
+		border-radius: 1.5em;
+	}
+	#hour
+	{
+		width:50px;
+	}	
+	#dispResult
+	{
+		height:100px;
+		width:200px;
+		position:relative;
+		background:orange;
+		padding-top:20px;
+		border: 2px solid;
+		border-bottom-right-radius: 1.5em;	
+	}
+	@media screen  and (orientation:portrait)
+	{
+		#title
+		{
+			text-align:center;
+		}
+		#form1
+		{
+			margin:auto;
+		}
+		#dispResult
+		{
+			margin:auto;
+		}
+	}
+	@media screen  and (orientation:landscape)
+	{	
+		#dispResult
+		{
+			transform:translate(12.5em,-10.5em);
+		}
+	}
+	</style>
+	<script src="scripts/jquery-2.1.4.js"></script>
+	<script src="scripts/jquery-ui.js"></script>
+	<link rel = "stylesheet" href = "scripts/jquery-ui.css" type="text/css"/>
+	<script>
+	$(window).load(function()
+	{
+		$('[id^=hour]').keypress(validateNumber);
+		$("#dispResult").hide();
+		$("#box").hide();
+		$("#position").change(function()
+		{
+			var regex = new RegExp('^'+$("#position").val()+'$',"i");
+			if(regex.test("Staff"))
+			{
+				$("#box").slideUp();
+			}
+			else
+			{
+				$("#box").slideDown();
+			}
+		});	
+	});
+	function validateNumber(event) {
+    var key = window.event ? event.keyCode : event.which;
+
+    if (event.keyCode == 8 || event.keyCode == 46 || event.keyCode == 37 || event.keyCode == 39) {
+        return true;
+    }
+    else if ( key < 48 || key > 57 ) {
+        return false;
+    }
+    else return true;
+	};
+	function calculate()
+	{
+		var hour = document.getElementById("hour").value;
+		var position = document.getElementById("position").value;
+		var tax = document.getElementById("tax").value;
+	
+	if(position == "staff")
+		{
+			if(hour <= 40)
+			{
+				var gpay = hour * 6.5;
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;		
+			}
+			else
+			{
+				var ot = hour - 40;
+				var gpay = (40 * 6.5) + (ot * 1.5 * 6.5);
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;	
+			}
+		}
+		else if(position == "supervisor")
+		{
+			if (document.getElementById('tax').checked)
+			{
+				if(hour <= 40)
+				{
+				var gpay = hour * 7.5;
+				var tax = gpay * 0.0;
+				var nett = gpay - tax;		
+				}
+				else
+				{
+				var ot = hour - 40;
+				var gpay = (40 * 7.5) + (ot * 1.5 * 7.5);
+				var tax = gpay * 0.00;
+				var nett = gpay - tax;	
+				}
+			}
+			else
+			{
+				if(hour <= 40)
+				{
+				var gpay = hour * 7.5;
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;		
+				}
+				else
+				{
+				var ot = hour - 40;
+				var gpay = (40 * 7.5) + (ot * 1.5 * 7.5);
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;	
+				}
+			}
+		}
+		else if(position == "manager")
+		{
+			if (document.getElementById('tax').checked)
+			{
+				if(hour <= 40)
+				{
+				var gpay = hour * 15;
+				var tax = gpay * 0.0;
+				var nett = gpay - tax;		
+				}
+				else
+				{
+				var ot = hour - 40;
+				var gpay = (40 * 15) + (ot * 1.5 * 15);
+				var tax = gpay * 0.0;
+				var nett = gpay - tax;	
+				}
+			}
+			else
+			{
+				if(hour <= 40)
+				{
+				var gpay = hour * 15;
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;		
+				}
+				else
+				{
+				var ot = hour - 40;
+				var gpay = (40 * 15) + (ot * 1.5 * 15);
+				var tax = gpay * 0.06;
+				var nett = gpay - tax;	
+				}
+			}
+		}
+		document.getElementById("dispResult").innerHTML = "<b>Gross Pay</b>: RM " + gpay.toFixed(2) 
+		+ "<br/><b>(-)Tax</b>: RM " + tax.toFixed(2) +"<br/><b>Nett Pay</b>: RM " + nett.toFixed(2);	
+		$("#dispResult").fadeIn(2000);
+	}
+	function resetA()
+	{
+		$("#dispResult").fadeOut(2000);
+	}
+	</script>
+</head>
+<body>
+	<h2 id="title">Salary Calculator</h2>
+	<tr/>
+	<div id = "form1"> 
+	<form>
+	 Hours: <input type = "number" id = "hour"/> <br/>
+	 Position: <select id="position" >
+			  <option value = "" style="display:none;"></option>
+			  <option value = "staff">Staff</option>
+			  <option value = "supervisor">Supervisor</option>
+		      <option value = "manager">Manager</option>
+			  </select><br/>
+			  <div id = "box"><input type="checkbox" id="tax" value="tax">Tax Exemption</input></div>
+	<input type = "button" value = "Submit" onclick = "calculate()"/>
+	<input type = "reset" value = "Reset" onclick = "resetA()""/>
+	</form>
+	</div>
+	<div id="dispResult"></div>
+</body>
+</html>
